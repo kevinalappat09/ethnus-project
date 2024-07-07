@@ -1,13 +1,13 @@
+// Made by 22BBS0069 - Nikita Simlote
+
 const express = require("express");
 const passport = require("passport");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const router = express.Router();
 
-// Register
 router.post("/register", async (req, res) => {
   const { first_name, last_name, email, password, is_admin } = req.body;
-
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -30,7 +30,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) throw err;
@@ -42,7 +41,6 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-// Logout
 router.get("/logout", (req, res) => {
   req.logout(err => {
     if (err) {

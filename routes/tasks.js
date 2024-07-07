@@ -1,8 +1,9 @@
+// Made by 22BBS0076 - Kevin Alappat
+
 const express = require("express");
 const router = express.Router();
 const Task = require("../models/Task")
 
-// Middleware to check if the user is authenticated
 const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
@@ -25,14 +26,12 @@ router.post("/", isAuthenticated, (req, res) => {
     .catch(err => console.log(err));
 });
 
-// Get all tasks for the authenticated user
 router.get("/", isAuthenticated, (req, res) => {
   Task.find({ user: req.user._id })
     .then(tasks => res.json(tasks))
     .catch(err => console.log(err));
 });
 
-// Update a task
 router.put("/:id", isAuthenticated, (req, res) => {
   const { title, description, due_date } = req.body;
   Task.findById(req.params.id)
@@ -52,7 +51,6 @@ router.put("/:id", isAuthenticated, (req, res) => {
     .catch(err => console.log(err));
 });
 
-// Delete a task
 router.delete("/:id", isAuthenticated, async (req, res) => {
     try {
       const task = await Task.findById(req.params.id);

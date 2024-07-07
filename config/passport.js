@@ -1,3 +1,5 @@
+// Made by 22BBS0076 - Kevin Alappat
+
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
@@ -8,13 +10,10 @@ module.exports = function(passport) {
   passport.use(
     new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
       try {
-        // Match user
         const user = await User.findOne({ email: email });
         if (!user) {
           return done(null, false, { message: "That email is not registered" });
         }
-
-        // Match password
         if (password === user.password) {
           return done(null, user);
         } else {
