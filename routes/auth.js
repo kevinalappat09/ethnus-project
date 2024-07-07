@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
     const payload = { id: user.id, email: user.email, is_admin: user.is_admin };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
-    res.json({ token });
+    res.json({ user,token });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server error" });
