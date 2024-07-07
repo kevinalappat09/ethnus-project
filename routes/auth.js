@@ -6,6 +6,13 @@ const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const router = express.Router();
 
+const isAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ message: "Not authenticated" });
+};
+
 router.post("/register", async (req, res) => {
   const { first_name, last_name, email, password, is_admin } = req.body;
   try {
@@ -49,6 +56,21 @@ router.get("/logout", (req, res) => {
     }
     res.json({ message: "Logged out" });
   });
+});
+
+
+router.get("/getUser", isAuthenticated, async (req, res) => {
+  const id = req.user.id;
+  try {
+      const user = await User.findById(id)
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json(user);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+  }
 });
 
 module.exports = router;
