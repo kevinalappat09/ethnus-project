@@ -9,7 +9,7 @@ const router = express.Router();
 const JWT_SECRET = "cat_token";
 
 const isAuthenticated = (req, res, next) => {
-  const token = req.header('Authorization')?.split(' ')[2];
+  const token = req.header('Authorization')?.split(' ')[1];
     if(!token) {
         return res.status(401).json({message:'Acccess denied'});
     }

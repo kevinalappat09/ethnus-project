@@ -42,7 +42,7 @@ router.post("/", isAuthenticated, (req, res) => {
 });
 
 router.get("/", isAuthenticated, (req, res) => {
-  Task.find({ user: req.user._id })
+  Task.find({ user: req.user.id })
     .then(tasks => res.json(tasks))
     .catch(err => console.log(err));
 });
@@ -52,7 +52,7 @@ router.put("/:id", isAuthenticated, (req, res) => {
   Task.findById(req.params.id)
     .then(task => {
       if (!task) return res.status(404).json({ message: "Task not found" });
-      if (task.user.toString() !== req.user._id.toString()) {
+      if (task.user.toString() !== req.user.id.toString()) {
         return res.status(401).json({ message: "Not authorized" });
       }
       task.title = title;
