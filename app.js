@@ -6,7 +6,7 @@ const passport = require("passport");
 const cors = require("cors");
 
 require("./models/User");
-require("./models/Task");
+require("./models/Task"); 
 
 require("./config/passport")(passport);
 
