@@ -9,18 +9,18 @@ const router = express.Router();
 const JWT_SECRET = "cat_token";
 
 const isAuthenticated = (req, res, next) => {
-  const token = req.headers["authorization"];
-  if (!token) {
-    return res.status(401).json({ message: "Not authenticated" });
-  }
-
-  jwt.verify(token.replace('Bearer ', ''), JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Invalid token" });
+  const token = req.header('Authorization')?.split(' ')[2];
+    if(!token) {
+        return res.status(401).json({message:'Acccess denied'});
     }
-    req.user = decoded;
-    next();
-  });
+    try {
+        const decodedToken = jwt.verify(token, JWT_SECRET);
+        req.user = decodedToken;
+        next();
+    } catch (err) {
+        console.error(err);
+        res.status(400).json({message:'Invalid token'});
+    }
 };
 
 router.post("/register", async (req, res) => {
@@ -56,6 +56,7 @@ router.post("/login", async (req, res) => {
     }
 
     const payload = { id: user.id, email: user.email, is_admin: user.is_admin };
+    console.log(payload);
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
     res.json({ user,token });
