@@ -9,6 +9,7 @@ const JWT_SECRET = "cat_token";
 
 
 const isAuthenticated = (req, res, next) => {
+  console.log(req.header('Authorization'));
   const token = req.header('Authorization')?.split(' ')[1];
   console.log("Token : " +token);
     if(!token) {
