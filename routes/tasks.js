@@ -29,6 +29,7 @@ const isAuthenticated = (req, res, next) => {
 // Create a task
 router.post("/", isAuthenticated, (req, res) => {
   const { title, description, due_date } = req.body;
+  console.log(title);
   const newTask = new Task({
     title:title,
     description :description,
